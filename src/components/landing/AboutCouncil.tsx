@@ -1,108 +1,141 @@
 import { Card, CardContent } from "@/components/ui/card"
-import { Users, Target, Heart, Award } from "lucide-react"
+import { Users, Target, Heart, Award, Sparkles } from "lucide-react"
+import { motion } from "framer-motion"
+
+const VALUES = [
+  {
+    icon: Users,
+    title: "Student Representation",
+    description: "We serve as the voice of all commerce students, ensuring your concerns are heard at every level.",
+  },
+  {
+    icon: Target,
+    title: "Leadership Development",
+    description: "Fostering the next generation of leaders through mentorship and hands-on governance experience.",
+  },
+  {
+    icon: Heart,
+    title: "Community Engagement",
+    description: "Building a vibrant campus community through events and collaborative projects.",
+  },
+  {
+    icon: Award,
+    title: "Academic Excellence",
+    description: "Supporting academic success through resource sharing and partnerships with faculty.",
+  },
+]
 
 export function AboutCouncil() {
-  const values = [
-    {
-      icon: Users,
-      title: "Student Representation",
-      description: "We serve as the voice of all commerce students, ensuring your concerns are heard and addressed at every level of university administration.",
-    },
-    {
-      icon: Target,
-      title: "Leadership Development",
-      description: "Fostering the next generation of leaders through mentorship programs, workshops, and hands-on governance experience.",
-    },
-    {
-      icon: Heart,
-      title: "Community Engagement",
-      description: "Building a vibrant campus community through events, initiatives, and collaborative projects that bring students together.",
-    },
-    {
-      icon: Award,
-      title: "Academic Excellence",
-      description: "Supporting academic success through resource sharing, study groups, and partnerships with faculty and administration.",
-    },
-  ]
-
   return (
-    <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-background to-muted/30">
+    <section id="about" className="py-24 lg:py-32 bg-background">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="mx-auto max-w-3xl text-center mb-16">
-          <h2 className="text-4xl font-extrabold tracking-tight text-blue-900 sm:text-5xl lg:text-6xl mb-6">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="mx-auto max-w-3xl text-center mb-20"
+        >
+          <span className="inline-block text-sm font-semibold text-secondary uppercase tracking-wider mb-4">
+            Who We Are
+          </span>
+          <h2 className="text-4xl font-black tracking-tight text-foreground sm:text-5xl lg:text-6xl mb-6 text-balance">
             About the Council
           </h2>
-          <p className="text-xl text-muted-foreground leading-relaxed">
+          <p className="text-lg text-muted-foreground leading-relaxed text-pretty">
             The AAU School of Commerce Student Council is dedicated to representing student interests,
-            fostering academic excellence, and creating a vibrant campus community. We work tirelessly
-            to ensure every student's voice is heard and their needs are met.
+            fostering academic excellence, and creating a vibrant campus community.
           </p>
-        </div>
+        </motion.div>
 
-        {/* Mission Statement */}
-        <div className="mb-16">
-          <Card className="bg-gradient-to-br from-blue-900 to-blue-950 text-white border-0 shadow-2xl rounded-2xl overflow-hidden">
-            <CardContent className="p-8 sm:p-12 lg:p-16">
-              <div className="grid lg:grid-cols-2 gap-8 items-center">
-                <div>
-                  <h3 className="text-2xl font-bold text-yellow-400 mb-4">Our Mission</h3>
-                  <p className="text-lg text-blue-100 leading-relaxed mb-6">
+        {/* Mission Statement Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="mb-20"
+        >
+          <Card className="overflow-hidden border-0 shadow-2xl bg-primary text-primary-foreground rounded-3xl">
+            <CardContent className="p-0">
+              <div className="grid lg:grid-cols-2 gap-0">
+                <div className="p-8 lg:p-12 xl:p-16 flex flex-col justify-center">
+                  <div className="inline-flex items-center gap-2 mb-6">
+                    <Sparkles className="h-5 w-5 text-secondary" />
+                    <span className="text-secondary text-sm font-semibold uppercase tracking-wider">
+                      Our Mission
+                    </span>
+                  </div>
+                  <h3 className="text-2xl lg:text-3xl font-bold mb-6 leading-tight">
+                    Empowering Commerce Students for a Better Tomorrow
+                  </h3>
+                  <p className="text-primary-foreground/80 text-lg leading-relaxed mb-8">
                     To empower commerce students by providing exceptional representation, fostering
                     inclusive community engagement, and championing academic and personal growth
                     opportunities that prepare students for leadership roles in their future careers.
                   </p>
-                  <div className="flex flex-wrap gap-4">
-                    <div className="flex items-center gap-2">
-                      <div className="h-2 w-2 rounded-full bg-yellow-400" />
-                      <span className="text-sm text-blue-200">Inclusive Representation</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="h-2 w-2 rounded-full bg-yellow-400" />
-                      <span className="text-sm text-blue-200">Transparent Governance</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="h-2 w-2 rounded-full bg-yellow-400" />
-                      <span className="text-sm text-blue-200">Student-Centered Approach</span>
-                    </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    {[
+                      "Inclusive Representation",
+                      "Transparent Governance",
+                      "Student-Centered Approach",
+                      "Continuous Improvement"
+                    ].map((item) => (
+                      <div key={item} className="flex items-center gap-2">
+                        <div className="h-2 w-2 rounded-full bg-secondary" />
+                        <span className="text-sm text-primary-foreground/70">{item}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
-                <div className="relative">
+                <div className="relative aspect-square lg:aspect-auto min-h-[300px]">
                   <img
                     src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&q=80"
                     alt="Students collaborating"
-                    className="rounded-xl shadow-2xl w-full h-64 sm:h-80 object-cover"
+                    className="absolute inset-0 h-full w-full object-cover"
                   />
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-blue-900/50 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-l from-transparent via-primary/20 to-primary/60 lg:bg-gradient-to-r lg:from-primary/80 lg:via-transparent lg:to-transparent" />
                 </div>
               </div>
             </CardContent>
           </Card>
-        </div>
+        </motion.div>
 
         {/* Core Values Grid */}
         <div>
-          <h3 className="text-2xl font-bold text-blue-900 text-center mb-8 sm:text-3xl">
+          <motion.h3
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5 }}
+            className="text-2xl font-bold text-foreground text-center mb-12"
+          >
             Our Core Values
-          </h3>
+          </motion.h3>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {values.map((value) => (
-              <Card
+            {VALUES.map((value, index) => (
+              <motion.div
                 key={value.title}
-                className="group transition-all duration-300 hover:shadow-xl hover:-translate-y-1 rounded-2xl border-2 border-border/50 hover:border-yellow-400/50"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
               >
-                <CardContent className="p-6">
-                  <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-blue-900 text-yellow-400 group-hover:bg-yellow-400 group-hover:text-blue-900 transition-all duration-300">
-                    <value.icon className="h-7 w-7" />
-                  </div>
-                  <h4 className="text-lg font-bold text-blue-900 mb-2">
-                    {value.title}
-                  </h4>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {value.description}
-                  </p>
-                </CardContent>
-              </Card>
+                <Card className="group h-full border-border/50 hover:border-secondary/50 transition-all duration-500 hover:shadow-xl hover:-translate-y-1 rounded-2xl">
+                  <CardContent className="p-6">
+                    <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-secondary/10 text-secondary transition-all duration-300 group-hover:bg-secondary group-hover:text-primary">
+                      <value.icon className="h-7 w-7" />
+                    </div>
+                    <h4 className="text-lg font-bold text-foreground mb-2 group-hover:text-secondary transition-colors">
+                      {value.title}
+                    </h4>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {value.description}
+                    </p>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </div>

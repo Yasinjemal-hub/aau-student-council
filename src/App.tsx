@@ -16,9 +16,20 @@ import { EventsPage } from "@/pages/EventsPage"
 import { LeadershipPage } from "@/pages/LeadershipPage"
 import { DocumentsPage } from "@/pages/DocumentsPage"
 import { AcademicResourcesPage } from "@/pages/AcademicResourcesPage"
+
+// Landing Components
+import { Navbar } from "@/components/layout/Navbar"
+import { Footer } from "@/components/layout/Footer"
 import { HeroSection } from "@/components/landing/HeroSection"
 import { AboutCouncil } from "@/components/landing/AboutCouncil"
+import { ExecutiveTeam } from "@/components/landing/ExecutiveTeam"
+import { EventsSection } from "@/components/landing/EventsSection"
+import { ClubsSection } from "@/components/landing/ClubsSection"
+import { GallerySection } from "@/components/landing/GallerySection"
+import { TestimonialsSection } from "@/components/landing/TestimonialsSection"
+import { ContactSection } from "@/components/landing/ContactSection"
 import { LatestAnnouncements } from "@/components/landing/LatestAnnouncements"
+
 import {
   GraduationCap,
   Users,
@@ -30,7 +41,7 @@ import {
   Moon,
   LogOut,
 } from "lucide-react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 
 type AppView = "landing" | "auth" | "dashboard" | "announcements" | "suggestions" | "events" | "leadership" | "documents" | "resources"
 
@@ -39,6 +50,9 @@ function App() {
   const [view, setView] = useState<AppView>("landing")
   const [currentUser, setCurrentUser] = useState<{ email: string } | null>(null)
   const { toasts, toast, dismiss } = useToast()
+
+  // Section refs for smooth scrolling
+  const sectionsRef = useRef<{ [key: string]: HTMLElement | null }>({})
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", darkMode)
@@ -56,6 +70,44 @@ function App() {
       title: "Signed Out",
       description: "You have been successfully signed out.",
     })
+  }
+
+  function handleNavigate(section: string) {
+    // Handle special navigation cases
+    if (section === "announcements") {
+      setView("announcements")
+      return
+    }
+    if (section === "suggestions") {
+      setView("suggestions")
+      return
+    }
+    if (section === "documents") {
+      setView("documents")
+      return
+    }
+    if (section === "resources") {
+      setView("resources")
+      return
+    }
+
+    // Smooth scroll to section
+    if (view !== "landing") {
+      setView("landing")
+      setTimeout(() => {
+        const element = document.getElementById(section)
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" })
+        }
+      }, 100)
+    } else {
+      const element = document.getElementById(section)
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" })
+      } else if (section === "home") {
+        window.scrollTo({ top: 0, behavior: "smooth" })
+      }
+    }
   }
 
   const features = [
@@ -103,12 +155,12 @@ function App() {
     },
   ]
 
-  /* ── Auth Page ───────────────────────────────────────── */
+  /* -- Auth Page -- */
   if (view === "auth") {
     return <AuthPage onAuthSuccess={handleAuthSuccess} />
   }
 
-  /* ── Announcements Page ──────────────────────────────── */
+  /* -- Announcements Page -- */
   if (view === "announcements") {
     return (
       <AnnouncementsPage
@@ -117,7 +169,7 @@ function App() {
     )
   }
 
-  /* ── Suggestion / Complaint Page ────────────────────── */
+  /* -- Suggestion / Complaint Page -- */
   if (view === "suggestions") {
     return (
       <SuggestionPage
@@ -126,7 +178,7 @@ function App() {
     )
   }
 
-  /* ── Events Page ────────────────────────────────────── */
+  /* -- Events Page -- */
   if (view === "events") {
     return (
       <EventsPage
@@ -135,7 +187,7 @@ function App() {
     )
   }
 
-  /* ── Leadership Page ────────────────────────────────── */
+  /* -- Leadership Page -- */
   if (view === "leadership") {
     return (
       <LeadershipPage
@@ -145,7 +197,7 @@ function App() {
     )
   }
 
-  /* ── Documents Page ─────────────────────────────────── */
+  /* -- Documents Page -- */
   if (view === "documents") {
     return (
       <DocumentsPage
@@ -154,7 +206,7 @@ function App() {
     )
   }
 
-  /* ── Academic Resources Page ─────────────────────────── */
+  /* -- Academic Resources Page -- */
   if (view === "resources") {
     return (
       <AcademicResourcesPage
@@ -163,15 +215,15 @@ function App() {
     )
   }
 
-  /* ── Dashboard (after login) ─────────────────────────── */
+  /* -- Dashboard (after login) -- */
   if (view === "dashboard" && currentUser) {
     return (
       <div className="min-h-dvh bg-background text-foreground transition-colors duration-300">
         <header className="sticky top-0 z-50 glass border-b border-border">
           <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
-                <GraduationCap className="h-6 w-6 text-primary-foreground" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white p-1 shadow-sm">
+                <img src="/assets/council_logo.png" alt="Council Logo" className="h-full w-full object-contain" />
               </div>
               <div>
                 <h1 className="text-lg font-bold leading-tight tracking-tight text-foreground">
@@ -190,7 +242,7 @@ function App() {
                 size="icon"
                 onClick={() => setDarkMode(!darkMode)}
                 aria-label="Toggle dark mode"
-                id="dashboard-theme-toggle"
+                className="rounded-full"
               >
                 {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
               </Button>
@@ -198,9 +250,9 @@ function App() {
                 variant="outline"
                 size="sm"
                 onClick={handleLogout}
-                id="logout-button"
+                className="rounded-full"
               >
-                <LogOut className="h-4 w-4" />
+                <LogOut className="h-4 w-4 mr-2" />
                 Sign Out
               </Button>
             </div>
@@ -210,30 +262,30 @@ function App() {
         <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
           <div className="mb-8">
             <h2 className="text-3xl font-bold tracking-tight">
-              Welcome back! 👋
+              Welcome back!
             </h2>
             <p className="mt-2 text-muted-foreground">
-              Here's what's happening with the Student Council today.
+              Here&apos;s what&apos;s happening with the Student Council today.
             </p>
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {features.map((feature) => (
               <Card
                 key={feature.title}
-                className="group transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer"
+                className="group transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer rounded-2xl border-border/50 hover:border-secondary/50"
                 onClick={feature.action}
               >
                 <CardHeader>
-                  <div className="mb-2 flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                    <feature.icon className="h-5 w-5" />
+                  <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-xl bg-secondary/10 text-secondary transition-colors group-hover:bg-secondary group-hover:text-primary">
+                    <feature.icon className="h-6 w-6" />
                   </div>
-                  <CardTitle className="text-base">{feature.title}</CardTitle>
+                  <CardTitle className="text-lg group-hover:text-secondary transition-colors">{feature.title}</CardTitle>
                   <CardDescription>{feature.description}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button variant="ghost" size="sm" className="w-full" onClick={feature.action}>
-                    Open →
+                  <Button variant="ghost" size="sm" className="w-full rounded-full group-hover:bg-secondary/10" onClick={feature.action}>
+                    Open
                   </Button>
                 </CardContent>
               </Card>
@@ -246,122 +298,66 @@ function App() {
     )
   }
 
-  /* ── Landing Page ────────────────────────────────────── */
+  /* -- Landing Page -- */
   return (
     <div className="min-h-dvh bg-background text-foreground transition-colors duration-300">
-      {/* ── Header ──────────────────────────────────────── */}
-      <header className="sticky top-0 z-50 glass border-b border-border">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
-              <GraduationCap className="h-6 w-6 text-primary-foreground" />
-            </div>
-            <div>
-              <h1 className="text-lg font-bold leading-tight tracking-tight text-foreground">
-                AAU Student Council
-              </h1>
-              <p className="text-xs text-muted-foreground">School of Commerce</p>
-            </div>
-          </div>
+      {/* Navbar */}
+      <Navbar
+        darkMode={darkMode}
+        onToggleDarkMode={() => setDarkMode(!darkMode)}
+        onSignIn={() => setView("auth")}
+        onNavigate={handleNavigate}
+      />
 
-          <nav
-            className="hidden items-center gap-1 md:flex"
-            role="navigation"
-            aria-label="Main navigation"
-          >
-            {["Home", "Announcements", "Council", "Events", "Documents"].map((item) => (
-              <Button
-                key={item}
-                variant="ghost"
-                size="sm"
-                id={`nav-${item.toLowerCase()}`}
-                onClick={
-                  item === "Announcements"
-                    ? () => setView("announcements")
-                    : undefined
-                }
-              >
-                {item}
-              </Button>
-            ))}
-          </nav>
-
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setDarkMode(!darkMode)}
-              aria-label="Toggle dark mode"
-              id="theme-toggle"
-            >
-              {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-            </Button>
-            <Button
-              size="sm"
-              id="sign-in-button"
-              onClick={() => setView("auth")}
-            >
-              Sign In
-            </Button>
-          </div>
-        </div>
-      </header>
-
-      {/* ── Hero ────────────────────────────────────────── */}
+      {/* Main Content */}
       <main>
-        <HeroSection />
+        {/* Hero Section */}
+        <div id="home">
+          <HeroSection
+            onGetStarted={() => setView("auth")}
+            onLearnMore={() => handleNavigate("about")}
+          />
+        </div>
 
-        {/* ── About Council ─────────────────────────────── */}
-        <AboutCouncil />
+        {/* About Section */}
+        <div id="about">
+          <AboutCouncil />
+        </div>
 
-        {/* ── Latest Announcements ───────────────────────── */}
+        {/* Executive Team Section */}
+        <div id="team">
+          <ExecutiveTeam />
+        </div>
+
+        {/* Latest Announcements */}
         <LatestAnnouncements />
 
-        {/* ── Features ──────────────────────────────────── */}
-        <section className="py-16 sm:py-20" aria-labelledby="features-heading">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="text-center">
-              <h3
-                id="features-heading"
-                className="text-2xl font-bold tracking-tight text-blue-900 sm:text-3xl"
-              >
-                Everything You Need
-              </h3>
-              <p className="mt-3 text-muted-foreground">
-                Tools and resources to support student governance and campus life.
-              </p>
-            </div>
+        {/* Events Section */}
+        <div id="events">
+          <EventsSection />
+        </div>
 
-            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {features.map((feature) => (
-                <Card
-                  key={feature.title}
-                  className="group transition-all duration-300 hover:shadow-xl hover:-translate-y-1 rounded-2xl border-2 border-border/50 hover:border-yellow-400/50 cursor-pointer"
-                  onClick={feature.action}
-                >
-                  <CardHeader>
-                    <div className="mb-2 flex h-11 w-11 items-center justify-center rounded-lg bg-blue-900 text-yellow-400 transition-colors group-hover:bg-yellow-400 group-hover:text-blue-900">
-                      <feature.icon className="h-5 w-5" />
-                    </div>
-                    <CardTitle className="text-base text-blue-900">{feature.title}</CardTitle>
-                    <CardDescription>{feature.description}</CardDescription>
-                  </CardHeader>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
+        {/* Clubs Section */}
+        <div id="clubs">
+          <ClubsSection />
+        </div>
+
+        {/* Gallery Section */}
+        <div id="gallery">
+          <GallerySection />
+        </div>
+
+        {/* Testimonials Section */}
+        <TestimonialsSection />
+
+        {/* Contact Section */}
+        <div id="contact">
+          <ContactSection />
+        </div>
       </main>
 
-      {/* ── Footer ──────────────────────────────────────── */}
-      <footer className="border-t border-border py-10">
-        <div className="mx-auto max-w-7xl px-4 text-center text-sm text-muted-foreground sm:px-6 lg:px-8">
-          <p>
-            &copy; {new Date().getFullYear()} Addis Ababa University — School of
-            Commerce Student Council. All rights reserved.
-          </p>
-        </div>
-      </footer>
+      {/* Footer */}
+      <Footer onNavigate={handleNavigate} />
 
       <Toaster toasts={toasts} dismiss={dismiss} />
     </div>
