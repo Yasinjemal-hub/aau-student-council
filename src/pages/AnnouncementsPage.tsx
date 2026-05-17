@@ -23,6 +23,8 @@ import {
   Clock,
   Pin,
   ArrowLeft,
+  Sparkles,
+  Bell,
 } from "lucide-react"
 
 /* ── Types ───────────────────────────────────────────────── */
@@ -326,43 +328,50 @@ export function AnnouncementsPage({ onBack }: AnnouncementsPageProps) {
   }, [])
 
   return (
-    <div className="min-h-dvh bg-background">
-      {/* ── Page Header ───────────────────────────────────── */}
-      <div className="border-b border-border bg-card">
-        <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3 mb-4">
+    <div className="min-h-dvh bg-gradient-to-b from-background to-muted/30">
+      {/* Page Header */}
+      <div className="relative overflow-hidden border-b border-border bg-gradient-to-r from-blue-900 to-blue-950">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-50" aria-hidden="true" />
+        
+        <div className="relative mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-4 mb-6">
             <Button
               variant="ghost"
               size="icon"
               onClick={onBack}
               id="announcements-back"
               aria-label="Go back"
+              className="text-white/70 hover:text-white hover:bg-white/10"
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
-              <Megaphone className="h-6 w-6" />
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-yellow-400 shadow-lg shadow-yellow-400/25">
+              <Megaphone className="h-7 w-7 text-blue-900" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+              <div className="flex items-center gap-2 mb-1">
+                <Sparkles className="h-4 w-4 text-yellow-400" />
+                <span className="text-xs font-semibold text-yellow-400 uppercase tracking-wider">Stay Informed</span>
+              </div>
+              <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
                 Announcements
               </h1>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-blue-200/70">
                 Stay up to date with the latest from the Student Council
               </p>
             </div>
           </div>
 
-          {/* ── Search & Filter Bar ─────────────────────────── */}
+          {/* Search & Filter Bar */}
           <div className="flex flex-col gap-3 sm:flex-row">
             {/* Search */}
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-blue-200/50" />
               <Input
                 id="announcements-search"
                 type="text"
                 placeholder="Search announcements..."
-                className="pl-10"
+                className="pl-11 h-12 bg-white/10 border-white/10 text-white placeholder:text-blue-200/50 focus:bg-white/15 focus:border-yellow-400/50 rounded-xl"
                 value={searchQuery}
                 onChange={(e) => handleSearchChange(e.target.value)}
                 aria-label="Search announcements"
@@ -370,12 +379,13 @@ export function AnnouncementsPage({ onBack }: AnnouncementsPageProps) {
             </div>
 
             {/* Category Filter */}
-            <div className="w-full sm:w-48">
+            <div className="w-full sm:w-52">
               <Select
                 id="category-filter"
                 value={categoryFilter}
                 onChange={(e) => handleCategoryChange(e.target.value)}
                 aria-label="Filter by category"
+                className="h-12 bg-white/10 border-white/10 text-white rounded-xl"
               >
                 <SelectOption value="all">
                   All Categories ({categoryCounts.all})
@@ -398,9 +408,9 @@ export function AnnouncementsPage({ onBack }: AnnouncementsPageProps) {
         </div>
       </div>
 
-      {/* ── Announcements Feed ────────────────────────────── */}
-      <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8">
-        {/* Category chips — mobile-friendly horizontal scroll */}
+      {/* Announcements Feed */}
+      <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+        {/* Category chips */}
         <div className="mb-6 flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
           {(["all", "Academic", "Social", "Sports", "Administrative"] as const).map(
             (cat) => {
@@ -409,19 +419,19 @@ export function AnnouncementsPage({ onBack }: AnnouncementsPageProps) {
                 <button
                   key={cat}
                   onClick={() => handleCategoryChange(cat)}
-                  className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-medium transition-all cursor-pointer ${
+                  className={`inline-flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all cursor-pointer ${
                     isActive
-                      ? "bg-primary text-primary-foreground shadow-sm"
-                      : "bg-muted text-muted-foreground hover:bg-muted/80"
+                      ? "bg-blue-900 text-white shadow-lg shadow-blue-900/25"
+                      : "bg-card border border-border text-muted-foreground hover:border-blue-900/30 hover:text-blue-900"
                   }`}
                   id={`chip-${cat.toLowerCase()}`}
                 >
                   {cat === "all" ? (
-                    <Megaphone className="h-3.5 w-3.5" />
+                    <Bell className="h-4 w-4" />
                   ) : (
                     (() => {
                       const Icon = CATEGORY_ICONS[cat]
-                      return <Icon className="h-3.5 w-3.5" />
+                      return <Icon className="h-4 w-4" />
                     })()
                   )}
                   {cat === "all" ? "All" : cat}

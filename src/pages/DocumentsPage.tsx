@@ -14,13 +14,16 @@ import {
   FileText,
   Download,
   Search,
-  Filter,
   ArrowLeft,
   Calendar,
   User,
   FileCheck,
   Clock,
   Upload,
+  Sparkles,
+  FolderOpen,
+  Eye,
+  X,
 } from "lucide-react"
 
 interface Document {
@@ -137,62 +140,75 @@ export function DocumentsPage({ onBack }: DocumentsPageProps) {
     setSelectedDocument(doc)
   }
 
-  function getStatusColor(status: string) {
+  function getStatusConfig(status: string) {
     switch (status) {
       case "approved":
-        return "bg-green-500/10 text-green-700 dark:text-green-400"
+        return { 
+          bg: "bg-emerald-500/10", 
+          text: "text-emerald-700", 
+          border: "border-emerald-200",
+          icon: FileCheck 
+        }
       case "pending":
-        return "bg-yellow-500/10 text-yellow-700 dark:text-yellow-400"
+        return { 
+          bg: "bg-amber-500/10", 
+          text: "text-amber-700", 
+          border: "border-amber-200",
+          icon: Clock 
+        }
       case "draft":
-        return "bg-gray-500/10 text-gray-700 dark:text-gray-400"
+        return { 
+          bg: "bg-slate-500/10", 
+          text: "text-slate-700", 
+          border: "border-slate-200",
+          icon: FileText 
+        }
       default:
-        return "bg-gray-500/10 text-gray-700 dark:text-gray-400"
-    }
-  }
-
-  function getStatusIcon(status: string) {
-    switch (status) {
-      case "approved":
-        return <FileCheck className="h-3 w-3" />
-      case "pending":
-        return <Clock className="h-3 w-3" />
-      case "draft":
-        return <FileText className="h-3 w-3" />
-      default:
-        return <FileText className="h-3 w-3" />
+        return { 
+          bg: "bg-slate-500/10", 
+          text: "text-slate-700", 
+          border: "border-slate-200",
+          icon: FileText 
+        }
     }
   }
 
   if (selectedDocument) {
+    const statusConfig = getStatusConfig(selectedDocument.status)
+    const StatusIcon = statusConfig.icon
+    
     return (
-      <div className="min-h-dvh bg-background text-foreground">
-        <header className="sticky top-0 z-50 glass border-b border-border">
-          <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-            <Button variant="ghost" size="sm" onClick={() => setSelectedDocument(null)}>
-              <ArrowLeft className="h-4 w-4 mr-2" />
+      <div className="min-h-dvh bg-gradient-to-b from-background to-muted/30 text-foreground">
+        <header className="fixed top-0 left-0 right-0 z-50 glass border-b border-border/50">
+          <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6 lg:px-8">
+            <Button variant="ghost" size="sm" onClick={() => setSelectedDocument(null)} className="gap-2">
+              <ArrowLeft className="h-4 w-4" />
               Back to Documents
             </Button>
-            <h1 className="text-lg font-semibold">Document Details</h1>
-            <div className="w-20" />
+            <h1 className="text-sm font-semibold text-muted-foreground">Document Details</h1>
+            <Button variant="ghost" size="icon" onClick={() => setSelectedDocument(null)}>
+              <X className="h-4 w-4" />
+            </Button>
           </div>
         </header>
 
-        <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-          <Card className="border-border/60 shadow-xl">
-            <CardHeader>
-              <div className="flex items-start justify-between">
+        <main className="mx-auto max-w-3xl px-4 pt-24 pb-12 sm:px-6 lg:px-8">
+          <Card className="border-border/60 shadow-xl rounded-2xl overflow-hidden">
+            {/* Header stripe */}
+            <div className="h-2 bg-gradient-to-r from-blue-900 to-blue-800" />
+            
+            <CardHeader className="pb-4">
+              <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Badge className={getStatusColor(selectedDocument.status)}>
-                      <span className="flex items-center gap-1">
-                        {getStatusIcon(selectedDocument.status)}
-                        {selectedDocument.status}
-                      </span>
+                  <div className="flex items-center gap-2 mb-3">
+                    <Badge className={`${statusConfig.bg} ${statusConfig.text} ${statusConfig.border} border font-semibold`}>
+                      <StatusIcon className="h-3 w-3 mr-1" />
+                      {selectedDocument.status}
                     </Badge>
-                    <Badge variant="outline">{selectedDocument.category}</Badge>
+                    <Badge variant="outline" className="font-medium">{selectedDocument.category}</Badge>
                   </div>
-                  <CardTitle className="text-2xl">{selectedDocument.title}</CardTitle>
-                  <CardDescription className="mt-2">
+                  <CardTitle className="text-2xl text-blue-900">{selectedDocument.title}</CardTitle>
+                  <CardDescription className="mt-3 text-base leading-relaxed">
                     {selectedDocument.description}
                   </CardDescription>
                 </div>
@@ -201,45 +217,53 @@ export function DocumentsPage({ onBack }: DocumentsPageProps) {
 
             <CardContent className="space-y-6">
               <div className="grid gap-4 sm:grid-cols-2">
-                <div className="flex items-center gap-3 p-4 rounded-lg bg-muted/50">
-                  <User className="h-5 w-5 text-muted-foreground" />
+                <div className="flex items-center gap-4 p-4 rounded-xl bg-muted/50 border border-border/50">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-900/10">
+                    <User className="h-5 w-5 text-blue-900" />
+                  </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Author</p>
-                    <p className="font-medium">{selectedDocument.author}</p>
+                    <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Author</p>
+                    <p className="font-semibold">{selectedDocument.author}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 p-4 rounded-lg bg-muted/50">
-                  <Calendar className="h-5 w-5 text-muted-foreground" />
+                <div className="flex items-center gap-4 p-4 rounded-xl bg-muted/50 border border-border/50">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-900/10">
+                    <Calendar className="h-5 w-5 text-blue-900" />
+                  </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Date</p>
-                    <p className="font-medium">{selectedDocument.date}</p>
+                    <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Date</p>
+                    <p className="font-semibold">{selectedDocument.date}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 p-4 rounded-lg bg-muted/50">
-                  <FileText className="h-5 w-5 text-muted-foreground" />
+                <div className="flex items-center gap-4 p-4 rounded-xl bg-muted/50 border border-border/50">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-900/10">
+                    <FileText className="h-5 w-5 text-blue-900" />
+                  </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">File Type</p>
-                    <p className="font-medium">{selectedDocument.type}</p>
+                    <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">File Type</p>
+                    <p className="font-semibold">{selectedDocument.type}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 p-4 rounded-lg bg-muted/50">
-                  <Download className="h-5 w-5 text-muted-foreground" />
+                <div className="flex items-center gap-4 p-4 rounded-xl bg-muted/50 border border-border/50">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-900/10">
+                    <Download className="h-5 w-5 text-blue-900" />
+                  </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">File Size</p>
-                    <p className="font-medium">{selectedDocument.size}</p>
+                    <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">File Size</p>
+                    <p className="font-semibold">{selectedDocument.size}</p>
                   </div>
                 </div>
               </div>
 
-              <div className="flex gap-3 pt-4 border-t border-border">
+              <div className="flex gap-3 pt-6 border-t border-border">
                 <Button
-                  className="flex-1"
+                  className="flex-1 bg-blue-900 hover:bg-blue-800 shadow-lg shadow-blue-900/25 rounded-xl h-12 font-semibold"
                   onClick={() => handleDownload(selectedDocument)}
                 >
                   <Download className="h-4 w-4 mr-2" />
                   Download Document
                 </Button>
-                <Button variant="outline" onClick={() => setSelectedDocument(null)}>
+                <Button variant="outline" onClick={() => setSelectedDocument(null)} className="rounded-xl h-12 px-6">
                   Close
                 </Button>
               </div>
@@ -251,97 +275,147 @@ export function DocumentsPage({ onBack }: DocumentsPageProps) {
   }
 
   return (
-    <div className="min-h-dvh bg-background text-foreground">
-      <header className="sticky top-0 z-50 glass border-b border-border">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Button variant="ghost" size="sm" onClick={onBack}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back
-          </Button>
-          <h1 className="text-lg font-semibold">Document Management</h1>
-          <Button size="sm">
-            <Upload className="h-4 w-4 mr-2" />
-            Upload Document
-          </Button>
-        </div>
-      </header>
+    <div className="min-h-dvh bg-gradient-to-b from-background to-muted/30 text-foreground">
+      {/* Header */}
+      <div className="relative overflow-hidden border-b border-border bg-gradient-to-r from-blue-900 to-blue-950">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-50" aria-hidden="true" />
+        
+        <div className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-4">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onBack}
+                className="text-white/70 hover:text-white hover:bg-white/10"
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-yellow-400 shadow-lg shadow-yellow-400/25">
+                <FolderOpen className="h-7 w-7 text-blue-900" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <Sparkles className="h-4 w-4 text-yellow-400" />
+                  <span className="text-xs font-semibold text-yellow-400 uppercase tracking-wider">Council Resources</span>
+                </div>
+                <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+                  Document Library
+                </h1>
+                <p className="text-sm text-blue-200/70">
+                  Access official documents, reports, and resources
+                </p>
+              </div>
+            </div>
 
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        {/* Search and Filter */}
-        <div className="mb-8 space-y-4">
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Button className="bg-yellow-400 text-blue-900 hover:bg-yellow-300 shadow-lg shadow-yellow-400/25 rounded-xl font-semibold">
+              <Upload className="h-4 w-4 mr-2" />
+              Upload Document
+            </Button>
+          </div>
+
+          {/* Search Bar */}
+          <div className="mt-8">
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-blue-200/50" />
               <Input
                 placeholder="Search documents..."
-                className="pl-10"
+                className="pl-11 h-12 bg-white/10 border-white/10 text-white placeholder:text-blue-200/50 focus:bg-white/15 focus:border-yellow-400/50 rounded-xl"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <div className="flex gap-2">
-              <Button variant="outline" size="icon">
-                <Filter className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap gap-2">
-            {categories.map((category) => (
-              <Button
-                key={category}
-                variant={selectedCategory === category ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSelectedCategory(category)}
-              >
-                {category.charAt(0).toUpperCase() + category.slice(1)}
-              </Button>
-            ))}
           </div>
         </div>
+      </div>
 
-        {/* Documents Grid */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredDocuments.map((doc) => (
-            <Card
-              key={doc.id}
-              className="group hover:shadow-lg transition-all duration-300 cursor-pointer border-border/60"
-              onClick={() => handleView(doc)}
+      <main className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+        {/* Category Chips */}
+        <div className="mb-8 flex flex-wrap gap-2">
+          {categories.map((category) => (
+            <Button
+              key={category}
+              variant={selectedCategory === category ? "default" : "outline"}
+              size="sm"
+              onClick={() => setSelectedCategory(category)}
+              className={`rounded-xl font-semibold ${
+                selectedCategory === category 
+                  ? "bg-blue-900 hover:bg-blue-800 shadow-lg shadow-blue-900/25" 
+                  : "hover:border-blue-900/30 hover:text-blue-900"
+              }`}
             >
-              <CardHeader>
-                <div className="flex items-start justify-between mb-2">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                    <FileText className="h-5 w-5" />
-                  </div>
-                  <Badge className={getStatusColor(doc.status)}>
-                    <span className="flex items-center gap-1">
-                      {getStatusIcon(doc.status)}
-                      {doc.status}
-                    </span>
-                  </Badge>
-                </div>
-                <CardTitle className="text-base line-clamp-2">{doc.title}</CardTitle>
-                <CardDescription className="line-clamp-2">
-                  {doc.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span>{doc.type}</span>
-                  <span>{doc.size}</span>
-                </div>
-              </CardContent>
-            </Card>
+              {category === "all" ? "All Documents" : category}
+            </Button>
           ))}
         </div>
 
+        {/* Documents Grid */}
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {filteredDocuments.map((doc) => {
+            const statusConfig = getStatusConfig(doc.status)
+            const StatusIcon = statusConfig.icon
+            
+            return (
+              <Card
+                key={doc.id}
+                className="group hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer border-border/60 rounded-2xl overflow-hidden"
+                onClick={() => handleView(doc)}
+              >
+                {/* Top stripe */}
+                <div className="h-1.5 bg-gradient-to-r from-blue-900 to-blue-800 group-hover:from-yellow-400 group-hover:to-yellow-500 transition-colors" />
+                
+                <CardHeader className="pb-3">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-900/10 text-blue-900 group-hover:bg-yellow-400 group-hover:text-blue-900 transition-colors">
+                      <FileText className="h-6 w-6" />
+                    </div>
+                    <Badge className={`${statusConfig.bg} ${statusConfig.text} ${statusConfig.border} border font-semibold`}>
+                      <StatusIcon className="h-3 w-3 mr-1" />
+                      {doc.status}
+                    </Badge>
+                  </div>
+                  <CardTitle className="text-base line-clamp-2 group-hover:text-blue-900 transition-colors">
+                    {doc.title}
+                  </CardTitle>
+                  <CardDescription className="line-clamp-2 mt-2">
+                    {doc.description}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between text-xs text-muted-foreground pt-3 border-t border-border/50">
+                    <span className="font-medium">{doc.type}</span>
+                    <span className="font-medium">{doc.size}</span>
+                  </div>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="w-full mt-4 text-blue-900 hover:bg-blue-900/10 font-semibold rounded-xl group/btn"
+                  >
+                    <Eye className="h-4 w-4 mr-2" />
+                    View Details
+                  </Button>
+                </CardContent>
+              </Card>
+            )
+          })}
+        </div>
+
         {filteredDocuments.length === 0 && (
-          <div className="text-center py-12">
-            <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-semibold mb-2">No documents found</h3>
-            <p className="text-muted-foreground">
+          <div className="text-center py-20">
+            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-muted">
+              <FileText className="h-10 w-10 text-muted-foreground/50" />
+            </div>
+            <h3 className="text-xl font-bold text-blue-900 mb-2">No documents found</h3>
+            <p className="text-muted-foreground mb-6">
               Try adjusting your search or filter criteria
             </p>
+            <Button 
+              variant="outline" 
+              onClick={() => { setSearchQuery(""); setSelectedCategory("all"); }}
+              className="rounded-xl"
+            >
+              Clear Filters
+            </Button>
           </div>
         )}
       </main>
