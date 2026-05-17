@@ -8,6 +8,7 @@ import { requireAuth } from '../middleware/auth.js';
 import { requireAdmin, requireCouncilOrAdmin } from '../middleware/rbac.js';
 
 // Import routes
+import authRoutes from '../routes/authRoutes.js';
 import adminUserRoutes from '../routes/adminUserRoutes.js';
 import adminDashboardRoutes from '../routes/adminDashboardRoutes.js';
 import adminSettingsRoutes from '../routes/adminSettingsRoutes.js';
@@ -82,6 +83,12 @@ app.get('/api/public', (req, res) => {
     timestamp: new Date().toISOString()
   });
 });
+
+// ============================================
+// AUTHENTICATION ROUTES
+// ============================================
+
+app.use('/api/auth', authRoutes);
 
 // ============================================
 // AUTHENTICATED ROUTES (Require valid JWT)
