@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { 
-  Facebook, 
-  Twitter, 
-  Instagram, 
-  Linkedin, 
-  Youtube,
+  Globe,
+  MessageCircle,
+  Camera,
+  Briefcase,
+  Play,
   Mail,
   ArrowRight
 } from "lucide-react"
@@ -39,11 +39,11 @@ const FOOTER_LINKS = {
 }
 
 const SOCIAL_LINKS = [
-  { icon: Facebook, href: "#", label: "Facebook" },
-  { icon: Twitter, href: "#", label: "Twitter" },
-  { icon: Instagram, href: "#", label: "Instagram" },
-  { icon: Linkedin, href: "#", label: "LinkedIn" },
-  { icon: Youtube, href: "#", label: "YouTube" },
+  { icon: Globe, href: "#", label: "Facebook" },
+  { icon: MessageCircle, href: "#", label: "Twitter" },
+  { icon: Camera, href: "#", label: "Instagram" },
+  { icon: Briefcase, href: "#", label: "LinkedIn" },
+  { icon: Play, href: "#", label: "YouTube" },
 ]
 
 export function Footer({ onNavigate }: FooterProps) {

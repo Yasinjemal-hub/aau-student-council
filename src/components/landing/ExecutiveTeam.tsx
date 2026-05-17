@@ -1,12 +1,12 @@
 import { Card, CardContent } from "@/components/ui/card"
-import { Mail, Linkedin, Twitter } from "lucide-react"
+import { Mail, Briefcase, MessageCircle } from "lucide-react"
 import { motion } from "framer-motion"
 
 const fadeInUp = {
   initial: { opacity: 0, y: 30 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: "-50px" },
-  transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
+  transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const }
 }
 
 interface TeamMember {
@@ -133,13 +133,13 @@ export function ExecutiveTeam() {
                       href="#"
                       className="h-10 w-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-secondary hover:text-primary transition-all"
                     >
-                      <Linkedin className="h-4 w-4" />
+                      <Briefcase className="h-4 w-4" />
                     </a>
                     <a
                       href="#"
                       className="h-10 w-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-secondary hover:text-primary transition-all"
                     >
-                      <Twitter className="h-4 w-4" />
+                      <MessageCircle className="h-4 w-4" />
                     </a>
                   </div>
                 </div>
@@ -190,7 +190,7 @@ export function ExecutiveTeam() {
                         href="#"
                         className="h-9 w-9 rounded-full bg-white/90 flex items-center justify-center text-primary hover:bg-secondary transition-colors"
                       >
-                        <Linkedin className="h-4 w-4" />
+                        <Briefcase className="h-4 w-4" />
                       </a>
                     </div>
                   </div>
