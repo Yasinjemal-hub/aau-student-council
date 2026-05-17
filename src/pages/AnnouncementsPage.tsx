@@ -455,19 +455,21 @@ export function AnnouncementsPage({ onBack }: AnnouncementsPageProps) {
 
         {/* Cards */}
         {paginatedAnnouncements.length === 0 ? (
-          <Card className="py-16 text-center">
+          <Card className="py-16 text-center rounded-2xl border-border/60">
             <CardContent>
-              <Search className="mx-auto mb-4 h-12 w-12 text-muted-foreground/40" />
-              <p className="text-lg font-medium text-muted-foreground">
+              <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-muted">
+                <Search className="h-8 w-8 text-muted-foreground/50" />
+              </div>
+              <p className="text-xl font-bold text-blue-900 mb-2">
                 No announcements found
               </p>
-              <p className="mt-1 text-sm text-muted-foreground/70">
+              <p className="text-muted-foreground">
                 Try adjusting your search or filter criteria
               </p>
               <Button
                 variant="outline"
                 size="sm"
-                className="mt-4"
+                className="mt-6 rounded-xl"
                 onClick={() => {
                   setSearchQuery("")
                   setCategoryFilter("all")
@@ -487,9 +489,9 @@ export function AnnouncementsPage({ onBack }: AnnouncementsPageProps) {
               return (
                 <Card
                   key={announcement.id}
-                  className={`group transition-all duration-200 hover:shadow-md ${
+                  className={`group transition-all duration-300 hover:shadow-xl hover:-translate-y-1 rounded-2xl border-border/60 overflow-hidden ${
                     announcement.pinned
-                      ? "border-primary/30 bg-primary/[0.02]"
+                      ? "border-yellow-400/30 bg-yellow-50/30"
                       : ""
                   }`}
                 >
@@ -497,19 +499,19 @@ export function AnnouncementsPage({ onBack }: AnnouncementsPageProps) {
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                       <div className="flex items-start gap-3 min-w-0 flex-1">
                         {/* Category icon */}
-                        <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                          <Icon className="h-5 w-5" />
+                        <div className="mt-0.5 flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-900/10 text-blue-900 group-hover:bg-yellow-400 group-hover:text-blue-900 transition-all">
+                          <Icon className="h-6 w-6" />
                         </div>
                         <div className="min-w-0 flex-1">
                           <div className="flex flex-wrap items-center gap-2 mb-1">
                             {announcement.pinned && (
-                              <Pin className="h-3.5 w-3.5 text-primary shrink-0" />
+                              <Pin className="h-4 w-4 text-yellow-500 shrink-0" />
                             )}
                             <Badge variant={CATEGORY_BADGE_VARIANT[announcement.category]}>
                               {announcement.category}
                             </Badge>
                           </div>
-                          <CardTitle className="text-base leading-snug sm:text-lg">
+                          <CardTitle className="text-base leading-snug sm:text-lg group-hover:text-blue-900 transition-colors">
                             {announcement.title}
                           </CardTitle>
                         </div>
@@ -544,13 +546,13 @@ export function AnnouncementsPage({ onBack }: AnnouncementsPageProps) {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="mt-2 -ml-2 text-primary"
+                      className="mt-3 -ml-2 text-blue-900 hover:text-blue-800 hover:bg-blue-900/10 font-semibold rounded-xl"
                       onClick={() =>
                         setExpandedId(isExpanded ? null : announcement.id)
                       }
                       id={`expand-${announcement.id}`}
                     >
-                      {isExpanded ? "Show less" : "Read more →"}
+                      {isExpanded ? "Show less" : "Read more"}
                     </Button>
                   </CardContent>
                 </Card>
@@ -559,9 +561,9 @@ export function AnnouncementsPage({ onBack }: AnnouncementsPageProps) {
           </div>
         )}
 
-        {/* ── Pagination ─────────────────────────────────── */}
+        {/* Pagination */}
         {totalPages > 1 && (
-          <div className="mt-8 flex items-center justify-center gap-2">
+          <div className="mt-10 flex items-center justify-center gap-2">
             <Button
               variant="outline"
               size="icon"
@@ -569,6 +571,7 @@ export function AnnouncementsPage({ onBack }: AnnouncementsPageProps) {
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               id="page-prev"
               aria-label="Previous page"
+              className="rounded-xl"
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
@@ -583,7 +586,7 @@ export function AnnouncementsPage({ onBack }: AnnouncementsPageProps) {
                     size="icon"
                     onClick={() => setCurrentPage(page)}
                     id={`page-${page}`}
-                    className="h-9 w-9 text-sm"
+                    className={`h-10 w-10 text-sm rounded-xl ${page === safeCurrentPage ? "bg-blue-900 hover:bg-blue-800" : ""}`}
                   >
                     {page}
                   </Button>
@@ -598,6 +601,7 @@ export function AnnouncementsPage({ onBack }: AnnouncementsPageProps) {
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               id="page-next"
               aria-label="Next page"
+              className="rounded-xl"
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
