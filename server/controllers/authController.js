@@ -220,6 +220,11 @@ export const getCurrentUser = async (req, res) => {
  */
 export const logout = async (req, res) => {
   try {
+    // Get the token from the Authorization header
+    const authHeader = req.headers.authorization;
+    const token = authHeader ? authHeader.substring(7) : null;
+
+    // Sign out from Supabase
     const { error } = await supabase.auth.signOut();
 
     if (error) {
@@ -228,6 +233,16 @@ export const logout = async (req, res) => {
         error: 'Logout Failed',
         message: 'Failed to logout'
       });
+    }
+
+    // Optionally, invalidate the session on the server side using admin client
+    if (token && supabaseAdmin) {
+      try {
+        await supabaseAdmin.auth.admin.signOut(token);
+      } catch (adminError) {
+        console.error('Admin logout error:', adminError);
+        // Continue with response even if admin logout fails
+      }
     }
 
     res.status(200).json({

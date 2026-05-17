@@ -56,7 +56,7 @@ const LEADERS: Leader[] = [
     phone: "+251 911 22 33 44",
     bio: "Visionary leader focused on academic excellence and student-led innovation within the School of Commerce. Kidus drives strategic initiatives that bridge the gap between academic theory and practical industry experience.",
     year: "Economics 4th Year",
-    image: "/assets/leadership/kidus.png",
+    image: "/assets/kidus-Elias.jpg",
   },
   {
     id: "l-1",
@@ -66,7 +66,7 @@ const LEADERS: Leader[] = [
     phone: "+251 922 33 44 55",
     bio: "Dedicated to representing the student body at international forums and building strategic partnerships. Rahma specializes in cross-cultural communication and diplomatic student relations.",
     year: "BAIS 3rd Year",
-    image: "/assets/leadership/rahma.png",
+    image: "/assets/Rahma.jpg",
   },
   {
     id: "l-4",
@@ -76,7 +76,7 @@ const LEADERS: Leader[] = [
     phone: "+251 933 44 55 66",
     bio: "Expert in administrative efficiency and cross-departmental coordination. Elda ensures the seamless execution of council resolutions and manages all internal organizational logistics.",
     year: "Accounting 3rd Year",
-    image: "/assets/leadership/elda.png",
+    image: "/assets/Elda.jpg",
   },
   {
     id: "l-2",
@@ -86,7 +86,7 @@ const LEADERS: Leader[] = [
     phone: "+251 944 55 66 77",
     bio: "Ensuring the highest standards of conduct and ethical behavior across all student organizations. Fikremaryam leads the ethics committee and oversees conflict resolution frameworks.",
     year: "Logistics 2nd Year",
-    image: "/assets/leadership/fikremaryam.png",
+    image: "/assets/Fekremariam.jpg",
   },
   {
     id: "l-5",
@@ -96,7 +96,7 @@ const LEADERS: Leader[] = [
     phone: "+251 955 66 77 88",
     bio: "Managing the council's public image and ensuring effective communication between the council and the student body. Abdulhafiz leads all digital presence and media engagement strategies.",
     year: "Marketing 3rd Year",
-    image: "/assets/leadership/abdulhafiz.png",
+    image: "/assets/Abdulhafiz.jpg",
   },
 ]
 
@@ -308,7 +308,7 @@ export function LeadershipPage({ onBack, onComplaint }: LeadershipPageProps) {
             <div className="relative">
               <div className="aspect-square rounded-3xl overflow-hidden bg-muted border border-border shadow-2xl">
                 <img
-                  src="/assets/leadership/rahma.png"
+                  src="/assets/Rahma.jpg"
                   alt="Featured Leader"
                   className="h-full w-full object-cover"
                 />

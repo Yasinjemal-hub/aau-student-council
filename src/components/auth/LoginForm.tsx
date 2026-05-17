@@ -15,7 +15,6 @@ import {
 import { GraduationCap, Loader2, Eye, EyeOff, Mail } from "lucide-react"
 import { useState } from "react"
 import api from "@/api/axios"
-import { useToast } from "@/hooks/use-toast"
 
 /* ── Zod Schema ──────────────────────────────────────────── */
 const loginSchema = z.object({
@@ -41,7 +40,6 @@ interface LoginFormProps {
 export function LoginForm({ onSuccess, onError, onSwitchToSignup }: LoginFormProps) {
   const [showPassword, setShowPassword] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { toast } = useToast()
 
   const {
     register,
@@ -64,29 +62,19 @@ export function LoginForm({ onSuccess, onError, onSwitchToSignup }: LoginFormPro
         password: data.password,
       })
 
-      const { token, role } = response.data
+      const { token } = response.data
 
       // Save JWT token to localStorage
       localStorage.setItem('supabase_token', token)
 
       setIsSubmitting(false)
 
-      // Redirect based on role
-      if (role === 'Admin') {
-        window.location.href = '/admin'
-      } else if (role === 'Council') {
-        window.location.href = '/council'
-      } else {
-        window.location.href = '/dashboard'
-      }
+      // Call success callback with email
+      onSuccess({ email: data.email })
     } catch (error: any) {
       setIsSubmitting(false)
       const errorMessage = error.response?.data?.message || error.message || 'Login failed. Please try again.'
-      toast({
-        title: 'Login Error',
-        description: errorMessage,
-        variant: 'destructive',
-      })
+      onError(errorMessage)
     }
   }
 
