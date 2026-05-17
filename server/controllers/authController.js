@@ -123,15 +123,15 @@ export const login = async (req, res) => {
       .eq('user_id', authData.user.id)
       .single();
 
-    // If no role found, assign default 'Student' role
-    let role = 'Student';
+    // If no role found, assign default 'General Student' role
+    let role = 'General Student';
     if (roleError || !userRole) {
       // Create default role for new users
       const { error: insertRoleError } = await supabaseAdmin
         .from('user_roles')
         .insert({
           user_id: authData.user.id,
-          role: 'Student'
+          role: 'General Student'
         });
 
       if (insertRoleError) {
@@ -203,7 +203,7 @@ export const getCurrentUser = async (req, res) => {
 
     res.status(200).json({
       user: profile,
-      role: userRole?.role || 'Student'
+      role: userRole?.role || 'General Student'
     });
   } catch (error) {
     console.error('Get current user error:', error);
