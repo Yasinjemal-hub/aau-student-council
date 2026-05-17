@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Calendar, ArrowRight, Megaphone } from "lucide-react"
+import { motion } from "framer-motion"
 
 export function LatestAnnouncements() {
   const announcements = [
@@ -31,7 +32,7 @@ export function LatestAnnouncements() {
     {
       id: 4,
       title: "New Study Lounge Opening in Building B",
-      description: "We're excited to announce the opening of a new modern study lounge equipped with high-speed internet and collaborative spaces.",
+      description: "We are excited to announce the opening of a new modern study lounge equipped with high-speed internet and collaborative spaces.",
       date: "May 8, 2026",
       category: "Facilities",
       image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80",
@@ -55,90 +56,107 @@ export function LatestAnnouncements() {
   ]
 
   return (
-    <section className="py-16 sm:py-20 lg:py-24 bg-background">
+    <section className="py-24 lg:py-32 bg-muted/30">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="mx-auto max-w-3xl text-center mb-16">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-blue-900/10 px-4 py-2">
-            <Megaphone className="h-4 w-4 text-blue-900" />
-            <span className="text-sm font-semibold text-blue-900 uppercase tracking-wider">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="mx-auto max-w-3xl text-center mb-16"
+        >
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-secondary/10 px-4 py-2">
+            <Megaphone className="h-4 w-4 text-secondary" />
+            <span className="text-sm font-semibold text-secondary uppercase tracking-wider">
               Stay Informed
             </span>
           </div>
-          <h2 className="text-4xl font-extrabold tracking-tight text-blue-900 sm:text-5xl lg:text-6xl mb-6">
+          <h2 className="text-4xl font-black tracking-tight text-foreground sm:text-5xl text-balance">
             Latest Announcements
           </h2>
-          <p className="text-xl text-muted-foreground leading-relaxed">
+          <p className="mt-4 text-lg text-muted-foreground leading-relaxed text-pretty">
             Stay up-to-date with the latest news, events, and important updates from the Student Council
             and university administration.
           </p>
-        </div>
+        </motion.div>
 
         {/* Announcements Grid */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {announcements.map((announcement) => (
-            <Card
+          {announcements.map((announcement, index) => (
+            <motion.div
               key={announcement.id}
-              className="group overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 rounded-2xl border-2 border-border/50 hover:border-yellow-400/50"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.5, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
             >
-              {/* Image */}
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src={announcement.image}
-                  alt={announcement.title}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-blue-900/80 to-transparent" />
-                <div className="absolute top-4 left-4">
-                  <span className="inline-flex items-center gap-1 rounded-full bg-yellow-400 px-3 py-1 text-xs font-bold text-blue-900">
-                    {announcement.category}
-                  </span>
-                </div>
-              </div>
-
-              {/* Content */}
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg font-bold text-blue-900 line-clamp-2 group-hover:text-yellow-600 transition-colors">
-                  {announcement.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-sm text-muted-foreground line-clamp-3 leading-relaxed">
-                  {announcement.description}
-                </p>
-                
-                {/* Meta Info */}
-                <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                  <div className="flex items-center gap-1">
-                    <Calendar className="h-3 w-3" />
-                    <span>{announcement.date}</span>
+              <Card className="group overflow-hidden transition-all duration-500 hover:shadow-xl hover:-translate-y-1 rounded-2xl border-border/50 hover:border-secondary/50 h-full flex flex-col">
+                {/* Image */}
+                <div className="relative h-48 overflow-hidden">
+                  <img
+                    src={announcement.image}
+                    alt={announcement.title}
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent" />
+                  <div className="absolute top-4 left-4">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-3 py-1 text-xs font-bold text-primary">
+                      {announcement.category}
+                    </span>
                   </div>
                 </div>
 
-                {/* Read More Button */}
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="w-full group/btn text-blue-900 hover:text-yellow-600 hover:bg-yellow-400/10"
-                >
-                  Read More
-                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
-                </Button>
-              </CardContent>
-            </Card>
+                {/* Content */}
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg font-bold text-foreground line-clamp-2 group-hover:text-secondary transition-colors">
+                    {announcement.title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4 flex-1 flex flex-col">
+                  <p className="text-sm text-muted-foreground line-clamp-3 leading-relaxed flex-1">
+                    {announcement.description}
+                  </p>
+                  
+                  {/* Meta Info */}
+                  <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-1">
+                      <Calendar className="h-3 w-3" />
+                      <span>{announcement.date}</span>
+                    </div>
+                  </div>
+
+                  {/* Read More Button */}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="w-full group/btn text-foreground hover:text-secondary hover:bg-secondary/10"
+                  >
+                    Read More
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+                  </Button>
+                </CardContent>
+              </Card>
+            </motion.div>
           ))}
         </div>
 
         {/* View All Button */}
-        <div className="mt-12 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="mt-12 text-center"
+        >
           <Button
             size="lg"
-            className="bg-blue-900 text-white hover:bg-blue-800 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-xl px-8 py-6 text-lg font-semibold"
+            className="bg-secondary text-primary hover:bg-secondary/90 hover:shadow-xl transition-all duration-300 rounded-full px-8 py-6 text-base font-semibold group"
           >
             View All Announcements
-            <ArrowRight className="ml-2 h-5 w-5" />
+            <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
           </Button>
-        </div>
+        </motion.div>
       </div>
     </section>
   )
