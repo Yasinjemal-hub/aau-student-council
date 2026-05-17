@@ -18,9 +18,11 @@ import {
   Quote,
 } from "lucide-react"
 
+import type { AppView } from "@/types"
+
 interface AboutPageProps {
   onBack: () => void
-  setView: (view: string) => void
+  setView: (view: AppView) => void
 }
 
 const values = [

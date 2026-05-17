@@ -6,8 +6,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Calendar, Clock, MapPin, Users, ArrowRight, CalendarDays, Sparkles } from "lucide-react"
 
+import type { AppView } from "@/types"
+
 interface UpcomingEventsProps {
-  setView: (view: string) => void
+  setView: (view: AppView) => void
 }
 
 const events = [

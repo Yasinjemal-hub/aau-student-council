@@ -39,10 +39,12 @@ import {
   ArrowDownRight,
 } from "lucide-react"
 
+import type { AppView } from "@/types"
+
 interface AdminDashboardPageProps {
   user: { email: string }
   onLogout: () => void
-  setView: (view: string) => void
+  setView: (view: AppView) => void
   darkMode: boolean
   setDarkMode: (value: boolean) => void
 }

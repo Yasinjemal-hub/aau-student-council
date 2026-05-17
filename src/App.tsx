@@ -29,6 +29,7 @@ import { Testimonials } from "@/components/landing/Testimonials"
 import { UpcomingEvents } from "@/components/landing/UpcomingEvents"
 import { Navbar } from "@/components/layout/Navbar"
 import { Footer } from "@/components/layout/Footer"
+import type { AppView } from "@/types"
 import {
   GraduationCap,
   Users,

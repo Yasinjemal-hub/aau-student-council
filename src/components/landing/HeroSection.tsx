@@ -5,8 +5,10 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight, Play, Users, Calendar, Award, Sparkles } from "lucide-react"
 import { useState, useEffect } from "react"
 
+import type { AppView } from "@/types"
+
 interface HeroSectionProps {
-  setView: (view: string) => void
+  setView: (view: AppView) => void
 }
 
 const stats = [

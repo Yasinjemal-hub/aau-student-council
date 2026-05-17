@@ -52,8 +52,10 @@ const socialLinks = [
   { icon: Youtube, label: "YouTube", href: "#", color: "hover:bg-red-600" },
 ]
 
+import type { AppView } from "@/types"
+
 interface FooterProps {
-  setView: (view: string) => void
+  setView: (view: AppView) => void
 }
 
 export function Footer({ setView }: FooterProps) {

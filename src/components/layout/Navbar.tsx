@@ -21,11 +21,13 @@ import {
   LayoutDashboard,
 } from "lucide-react"
 
+import type { AppView } from "@/types"
+
 interface NavbarProps {
   darkMode: boolean
   setDarkMode: (value: boolean) => void
   currentView: string
-  setView: (view: string) => void
+  setView: (view: AppView) => void
   currentUser: { email: string } | null
 }
 
