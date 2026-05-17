@@ -1,3 +1,5 @@
+"use client"
+
 import "./App.css"
 import { Button } from "@/components/ui/button"
 import {
@@ -16,9 +18,17 @@ import { EventsPage } from "@/pages/EventsPage"
 import { LeadershipPage } from "@/pages/LeadershipPage"
 import { DocumentsPage } from "@/pages/DocumentsPage"
 import { AcademicResourcesPage } from "@/pages/AcademicResourcesPage"
+import { ContactPage } from "@/pages/ContactPage"
+import { AboutPage } from "@/pages/AboutPage"
+import { StudentDashboard } from "@/pages/StudentDashboard"
+import { AdminDashboardPage } from "@/pages/AdminDashboardPage"
 import { HeroSection } from "@/components/landing/HeroSection"
 import { AboutCouncil } from "@/components/landing/AboutCouncil"
 import { LatestAnnouncements } from "@/components/landing/LatestAnnouncements"
+import { Testimonials } from "@/components/landing/Testimonials"
+import { UpcomingEvents } from "@/components/landing/UpcomingEvents"
+import { Navbar } from "@/components/layout/Navbar"
+import { Footer } from "@/components/layout/Footer"
 import {
   GraduationCap,
   Users,
@@ -26,18 +36,27 @@ import {
   FileText,
   Megaphone,
   MessageSquarePlus,
-  Sun,
-  Moon,
-  LogOut,
 } from "lucide-react"
 import { useState, useEffect } from "react"
 
-type AppView = "landing" | "auth" | "dashboard" | "announcements" | "suggestions" | "events" | "leadership" | "documents" | "resources"
+type AppView = 
+  | "landing" 
+  | "auth" 
+  | "dashboard" 
+  | "admin-dashboard"
+  | "announcements" 
+  | "suggestions" 
+  | "events" 
+  | "leadership" 
+  | "documents" 
+  | "resources"
+  | "contact"
+  | "about"
 
 function App() {
   const [darkMode, setDarkMode] = useState(false)
   const [view, setView] = useState<AppView>("landing")
-  const [currentUser, setCurrentUser] = useState<{ email: string } | null>(null)
+  const [currentUser, setCurrentUser] = useState<{ email: string; role?: string } | null>(null)
   const { toasts, toast, dismiss } = useToast()
 
   useEffect(() => {
@@ -45,8 +64,10 @@ function App() {
   }, [darkMode])
 
   function handleAuthSuccess(user: { email: string }) {
-    setCurrentUser(user)
-    setView("dashboard")
+    // Check if admin
+    const isAdmin = user.email.toLowerCase().includes("admin")
+    setCurrentUser({ ...user, role: isAdmin ? "admin" : "student" })
+    setView(isAdmin ? "admin-dashboard" : "dashboard")
   }
 
   function handleLogout() {
@@ -108,244 +129,266 @@ function App() {
     return <AuthPage onAuthSuccess={handleAuthSuccess} />
   }
 
+  /* ── Admin Dashboard ─────────────────────────────────── */
+  if (view === "admin-dashboard" && currentUser?.role === "admin") {
+    return (
+      <AdminDashboardPage
+        user={currentUser}
+        onLogout={handleLogout}
+        setView={setView}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
+      />
+    )
+  }
+
+  /* ── Student Dashboard ───────────────────────────────── */
+  if (view === "dashboard" && currentUser) {
+    return (
+      <StudentDashboard
+        user={currentUser}
+        onLogout={handleLogout}
+        setView={setView}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
+      />
+    )
+  }
+
+  /* ── Contact Page ────────────────────────────────────── */
+  if (view === "contact") {
+    return (
+      <>
+        <Navbar
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
+          currentView={view}
+          setView={setView}
+          currentUser={currentUser}
+        />
+        <ContactPage onBack={() => setView(currentUser ? "dashboard" : "landing")} />
+        <Footer setView={setView} />
+        <Toaster toasts={toasts} dismiss={dismiss} />
+      </>
+    )
+  }
+
+  /* ── About Page ──────────────────────────────────────── */
+  if (view === "about") {
+    return (
+      <>
+        <Navbar
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
+          currentView={view}
+          setView={setView}
+          currentUser={currentUser}
+        />
+        <AboutPage 
+          onBack={() => setView(currentUser ? "dashboard" : "landing")} 
+          setView={setView}
+        />
+        <Footer setView={setView} />
+        <Toaster toasts={toasts} dismiss={dismiss} />
+      </>
+    )
+  }
+
   /* ── Announcements Page ──────────────────────────────── */
   if (view === "announcements") {
     return (
-      <AnnouncementsPage
-        onBack={() => setView(currentUser ? "dashboard" : "landing")}
-      />
+      <>
+        <Navbar
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
+          currentView={view}
+          setView={setView}
+          currentUser={currentUser}
+        />
+        <div className="pt-16 lg:pt-20">
+          <AnnouncementsPage
+            onBack={() => setView(currentUser ? "dashboard" : "landing")}
+          />
+        </div>
+        <Footer setView={setView} />
+        <Toaster toasts={toasts} dismiss={dismiss} />
+      </>
     )
   }
 
   /* ── Suggestion / Complaint Page ────────────────────── */
   if (view === "suggestions") {
     return (
-      <SuggestionPage
-        onBack={() => setView(currentUser ? "dashboard" : "landing")}
-      />
+      <>
+        <Navbar
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
+          currentView={view}
+          setView={setView}
+          currentUser={currentUser}
+        />
+        <div className="pt-16 lg:pt-20">
+          <SuggestionPage
+            onBack={() => setView(currentUser ? "dashboard" : "landing")}
+          />
+        </div>
+        <Footer setView={setView} />
+        <Toaster toasts={toasts} dismiss={dismiss} />
+      </>
     )
   }
 
   /* ── Events Page ────────────────────────────────────── */
   if (view === "events") {
     return (
-      <EventsPage
-        onBack={() => setView(currentUser ? "dashboard" : "landing")}
-      />
+      <>
+        <Navbar
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
+          currentView={view}
+          setView={setView}
+          currentUser={currentUser}
+        />
+        <div className="pt-16 lg:pt-20">
+          <EventsPage
+            onBack={() => setView(currentUser ? "dashboard" : "landing")}
+          />
+        </div>
+        <Footer setView={setView} />
+        <Toaster toasts={toasts} dismiss={dismiss} />
+      </>
     )
   }
 
   /* ── Leadership Page ────────────────────────────────── */
   if (view === "leadership") {
     return (
-      <LeadershipPage
-        onBack={() => setView(currentUser ? "dashboard" : "landing")}
-        onComplaint={() => setView("suggestions")}
-      />
+      <>
+        <Navbar
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
+          currentView={view}
+          setView={setView}
+          currentUser={currentUser}
+        />
+        <div className="pt-16 lg:pt-20">
+          <LeadershipPage
+            onBack={() => setView(currentUser ? "dashboard" : "landing")}
+            onComplaint={() => setView("suggestions")}
+          />
+        </div>
+        <Footer setView={setView} />
+        <Toaster toasts={toasts} dismiss={dismiss} />
+      </>
     )
   }
 
   /* ── Documents Page ─────────────────────────────────── */
   if (view === "documents") {
     return (
-      <DocumentsPage
-        onBack={() => setView(currentUser ? "dashboard" : "landing")}
-      />
+      <>
+        <Navbar
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
+          currentView={view}
+          setView={setView}
+          currentUser={currentUser}
+        />
+        <div className="pt-16 lg:pt-20">
+          <DocumentsPage
+            onBack={() => setView(currentUser ? "dashboard" : "landing")}
+          />
+        </div>
+        <Footer setView={setView} />
+        <Toaster toasts={toasts} dismiss={dismiss} />
+      </>
     )
   }
 
   /* ── Academic Resources Page ─────────────────────────── */
   if (view === "resources") {
     return (
-      <AcademicResourcesPage
-        onBack={() => setView(currentUser ? "dashboard" : "landing")}
-      />
-    )
-  }
-
-  /* ── Dashboard (after login) ─────────────────────────── */
-  if (view === "dashboard" && currentUser) {
-    return (
-      <div className="min-h-dvh bg-background text-foreground transition-colors duration-300">
-        <header className="sticky top-0 z-50 glass border-b border-border">
-          <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
-                <GraduationCap className="h-6 w-6 text-primary-foreground" />
-              </div>
-              <div>
-                <h1 className="text-lg font-bold leading-tight tracking-tight text-foreground">
-                  AAU Student Council
-                </h1>
-                <p className="text-xs text-muted-foreground">School of Commerce</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <span className="text-sm text-muted-foreground hidden sm:block">
-                {currentUser.email}
-              </span>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setDarkMode(!darkMode)}
-                aria-label="Toggle dark mode"
-                id="dashboard-theme-toggle"
-              >
-                {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleLogout}
-                id="logout-button"
-              >
-                <LogOut className="h-4 w-4" />
-                Sign Out
-              </Button>
-            </div>
-          </div>
-        </header>
-
-        <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-          <div className="mb-8">
-            <h2 className="text-3xl font-bold tracking-tight">
-              Welcome back! 👋
-            </h2>
-            <p className="mt-2 text-muted-foreground">
-              Here's what's happening with the Student Council today.
-            </p>
-          </div>
-
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {features.map((feature) => (
-              <Card
-                key={feature.title}
-                className="group transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer"
-                onClick={feature.action}
-              >
-                <CardHeader>
-                  <div className="mb-2 flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                    <feature.icon className="h-5 w-5" />
-                  </div>
-                  <CardTitle className="text-base">{feature.title}</CardTitle>
-                  <CardDescription>{feature.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Button variant="ghost" size="sm" className="w-full" onClick={feature.action}>
-                    Open →
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </main>
-
+      <>
+        <Navbar
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
+          currentView={view}
+          setView={setView}
+          currentUser={currentUser}
+        />
+        <div className="pt-16 lg:pt-20">
+          <AcademicResourcesPage
+            onBack={() => setView(currentUser ? "dashboard" : "landing")}
+          />
+        </div>
+        <Footer setView={setView} />
         <Toaster toasts={toasts} dismiss={dismiss} />
-      </div>
+      </>
     )
   }
 
   /* ── Landing Page ────────────────────────────────────── */
   return (
     <div className="min-h-dvh bg-background text-foreground transition-colors duration-300">
-      {/* ── Header ──────────────────────────────────────── */}
-      <header className="sticky top-0 z-50 glass border-b border-border">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
-              <GraduationCap className="h-6 w-6 text-primary-foreground" />
-            </div>
-            <div>
-              <h1 className="text-lg font-bold leading-tight tracking-tight text-foreground">
-                AAU Student Council
-              </h1>
-              <p className="text-xs text-muted-foreground">School of Commerce</p>
-            </div>
-          </div>
+      {/* Navbar */}
+      <Navbar
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
+        currentView={view}
+        setView={setView}
+        currentUser={currentUser}
+      />
 
-          <nav
-            className="hidden items-center gap-1 md:flex"
-            role="navigation"
-            aria-label="Main navigation"
-          >
-            {["Home", "Announcements", "Council", "Events", "Documents"].map((item) => (
-              <Button
-                key={item}
-                variant="ghost"
-                size="sm"
-                id={`nav-${item.toLowerCase()}`}
-                onClick={
-                  item === "Announcements"
-                    ? () => setView("announcements")
-                    : undefined
-                }
-              >
-                {item}
-              </Button>
-            ))}
-          </nav>
-
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setDarkMode(!darkMode)}
-              aria-label="Toggle dark mode"
-              id="theme-toggle"
-            >
-              {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-            </Button>
-            <Button
-              size="sm"
-              id="sign-in-button"
-              onClick={() => setView("auth")}
-            >
-              Sign In
-            </Button>
-          </div>
-        </div>
-      </header>
-
-      {/* ── Hero ────────────────────────────────────────── */}
       <main>
-        <HeroSection />
+        {/* Hero */}
+        <HeroSection setView={setView} />
 
-        {/* ── About Council ─────────────────────────────── */}
+        {/* About Council */}
         <AboutCouncil />
 
-        {/* ── Latest Announcements ───────────────────────── */}
+        {/* Latest Announcements */}
         <LatestAnnouncements />
 
-        {/* ── Features ──────────────────────────────────── */}
-        <section className="py-16 sm:py-20" aria-labelledby="features-heading">
+        {/* Testimonials */}
+        <Testimonials />
+
+        {/* Upcoming Events */}
+        <UpcomingEvents setView={setView} />
+
+        {/* Features */}
+        <section className="py-20 sm:py-28 bg-gradient-to-b from-background to-muted/30" aria-labelledby="features-heading">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="text-center">
+            <div className="text-center mb-16">
               <h3
                 id="features-heading"
-                className="text-2xl font-bold tracking-tight text-blue-900 sm:text-3xl"
+                className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-foreground mb-4"
               >
                 Everything You Need
               </h3>
-              <p className="mt-3 text-muted-foreground">
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                 Tools and resources to support student governance and campus life.
               </p>
             </div>
 
-            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {features.map((feature) => (
                 <Card
                   key={feature.title}
-                  className="group transition-all duration-300 hover:shadow-xl hover:-translate-y-1 rounded-2xl border-2 border-border/50 hover:border-yellow-400/50 cursor-pointer"
+                  className="group transition-all duration-300 hover:shadow-xl hover:-translate-y-1 rounded-2xl border-border/50 hover:border-yellow-400/30 cursor-pointer"
                   onClick={feature.action}
                 >
                   <CardHeader>
-                    <div className="mb-2 flex h-11 w-11 items-center justify-center rounded-lg bg-blue-900 text-yellow-400 transition-colors group-hover:bg-yellow-400 group-hover:text-blue-900">
-                      <feature.icon className="h-5 w-5" />
+                    <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-blue-900 to-blue-800 text-yellow-400 transition-all group-hover:from-yellow-400 group-hover:to-yellow-500 group-hover:text-blue-900">
+                      <feature.icon className="h-7 w-7" />
                     </div>
-                    <CardTitle className="text-base text-blue-900">{feature.title}</CardTitle>
-                    <CardDescription>{feature.description}</CardDescription>
+                    <CardTitle className="text-lg text-foreground">{feature.title}</CardTitle>
+                    <CardDescription className="text-muted-foreground">{feature.description}</CardDescription>
                   </CardHeader>
+                  <CardContent>
+                    <Button variant="ghost" size="sm" className="w-full text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-950" onClick={feature.action}>
+                      Explore &rarr;
+                    </Button>
+                  </CardContent>
                 </Card>
               ))}
             </div>
@@ -353,15 +396,8 @@ function App() {
         </section>
       </main>
 
-      {/* ── Footer ──────────────────────────────────────── */}
-      <footer className="border-t border-border py-10">
-        <div className="mx-auto max-w-7xl px-4 text-center text-sm text-muted-foreground sm:px-6 lg:px-8">
-          <p>
-            &copy; {new Date().getFullYear()} Addis Ababa University — School of
-            Commerce Student Council. All rights reserved.
-          </p>
-        </div>
-      </footer>
+      {/* Footer */}
+      <Footer setView={setView} />
 
       <Toaster toasts={toasts} dismiss={dismiss} />
     </div>
